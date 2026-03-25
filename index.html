@@ -6,9 +6,11 @@
     <title>AVEL | Data Ciar</title>
     
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
     <meta name="theme-color" content="#007bff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -31,58 +33,96 @@
             transform: translateY(-4px);
             box-shadow: 0 15px 35px rgba(0, 123, 255, 0.4);
         }
+        .btn-panel:active {
+            transform: translateY(2px);
+            border-bottom-width: 2px;
+        }
+        /* Animación suave */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
 
-    <header class="bg-azul-app py-10 shadow-xl border-b-4 border-[#e1ad01] flex-shrink-0">
-        <div class="text-center px-4">
-            <h1 class="text-white text-7xl md:text-8xl font-black tracking-tighter leading-none mb-2">AVEL</h1>
-            <p class="text-[#e1ad01] text-[9px] font-black uppercase tracking-[0.4em] italic">Asociación de Voleibol del Estado Lara</p>
+    <header class="bg-azul-app py-12 shadow-2xl border-b-4 border-[#e1ad01] flex-shrink-0 relative overflow-hidden">
+        <div class="text-center px-4 relative z-10 fade-in">
+            <h1 class="text-white text-7xl md:text-8xl font-black tracking-tighter leading-none mb-2 drop-shadow-2xl">AVEL</h1>
+            <p class="text-[#e1ad01] text-[10px] md:text-xs font-black uppercase tracking-[0.4em] italic">Asociación de Voleibol del Estado Lara</p>
         </div>
     </header>
 
-    <main class="flex-grow flex items-center justify-center p-6 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">
-        <div class="bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
-            <div class="h-2 bg-[#e1ad01] w-full"></div>
-            <div class="p-10 text-center">
-                <p class="text-gray-400 font-bold text-[8px] uppercase tracking-[0.3em] mb-8 italic">Data Ciar - Gestión</p>
+    <main class="flex-grow flex items-center justify-center p-6 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] shadow-[0_25px_60px_rgba(0,0,0,0.15)] overflow-hidden border border-gray-100 fade-in">
+            <div class="h-3 bg-[#e1ad01] w-full"></div>
+            
+            <div class="p-12 text-center">
+                <p class="text-gray-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-12 italic">Sistema de Gestión - Data Ciar</p>
                 
-                <a href="index_listaciar.html" class="btn-panel group block w-full py-6 rounded-2xl flex flex-col items-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#e1ad01]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span class="text-white font-black uppercase tracking-[0.2em] text-sm italic">Atletas CIAR</span>
+                <a href="index_listaciar.html" class="btn-panel group block w-full py-8 rounded-[2rem] flex flex-col items-center gap-4">
+                    <div class="bg-white/20 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#e1ad01]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <span class="text-white font-black uppercase tracking-[0.2em] text-lg italic">Atletas CIAR</span>
                 </a>
+
+                <div class="mt-12 pt-6 border-t border-gray-50 opacity-40">
+                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest italic text-center">Software v2.6 - Sistematikos</p>
+                </div>
             </div>
         </div>
     </main>
 
-    <footer class="bg-white py-5 border-t border-gray-200 text-center flex-shrink-0">
-        <p class="text-gray-500 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em]">
+    <footer class="bg-white py-6 border-t border-gray-100 text-center flex-shrink-0">
+        <p class="text-gray-500 text-[11px] font-bold uppercase tracking-[0.2em]">
             Desarrollado por <span class="text-[#007bff]">Sistematikos</span> - Frank Hernandez
         </p>
     </footer>
 
     <script>
+        // 1. Bloqueo de Clic Derecho e Inspección (F12, Ctrl+U)
         document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = e => {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+                return false;
+            }
         };
 
+        // 2. Registro de Service Worker para PWA
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
         }
 
+        // 3. Prompt de Instalación Inteligente
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
+            // Evita que el navegador lance el aviso por defecto inmediatamente
             e.preventDefault();
             deferredPrompt = e;
+            
+            // Lanza el aviso personalizado tras 3 segundos
             setTimeout(() => {
-                if (confirm("✨ SISTEMATIKOS:\n\n¿Deseas instalar 'Atletas CIAR' en tu pantalla de inicio?")) {
+                if (confirm("✨ OPTIMIZACIÓN SISTEMATIKOS:\n\n¿Deseas instalar 'Atletas CIAR' como una aplicación en tu pantalla de inicio para acceso rápido?")) {
                     deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choice) => {
+                        if (choice.outcome === 'accepted') {
+                            console.log('El usuario instaló la App');
+                        }
+                        deferredPrompt = null;
+                    });
                 }
             }, 3000);
+        });
+
+        // Detectar si ya se instaló satisfactoriamente
+        window.addEventListener('appinstalled', () => {
+            alert("✅ ¡Instalación Exitosa! Ya puedes usar Data Ciar desde tu menú de inicio.");
         });
     </script>
 </body>
