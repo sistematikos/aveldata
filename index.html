@@ -10,119 +10,121 @@
     <meta name="theme-color" content="#007bff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            user-select: none; 
-            -webkit-user-select: none;
-            background-color: #f9fafb;
-        }
+        body { font-family: 'Inter', sans-serif; user-select: none; background-color: #f9fafb; }
         .bg-azul-app { background-color: #007bff; }
         .btn-panel {
             background-color: #007bff;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             border-bottom: 6px solid #0056b3;
         }
-        .btn-panel:hover {
-            background-color: #0056b3;
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(0, 123, 255, 0.4);
+        .btn-panel:hover { transform: translateY(-4px); shadow: 0 15px 35px rgba(0,123,255,0.4); }
+        
+        /* Estilos del Cartel Flotante */
+        #pwa-toast {
+            visibility: hidden;
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            z-index: 9999;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid #e1ad01;
         }
-        .btn-panel:active {
-            transform: translateY(2px);
-            border-bottom-width: 2px;
-        }
-        /* Animación suave */
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        #pwa-toast.show {
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
         }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden">
 
-    <header class="bg-azul-app py-12 shadow-2xl border-b-4 border-[#e1ad01] flex-shrink-0 relative overflow-hidden">
-        <div class="text-center px-4 relative z-10 fade-in">
-            <h1 class="text-white text-7xl md:text-8xl font-black tracking-tighter leading-none mb-2 drop-shadow-2xl">AVEL</h1>
-            <p class="text-[#e1ad01] text-[10px] md:text-xs font-black uppercase tracking-[0.4em] italic">Asociación de Voleibol del Estado Lara</p>
-        </div>
+    <header class="bg-azul-app py-10 shadow-xl border-b-4 border-[#e1ad01] flex-shrink-0 text-center">
+        <h1 class="text-white text-7xl font-black tracking-tighter mb-2 italic">AVEL</h1>
+        <p class="text-[#e1ad01] text-[10px] font-black uppercase tracking-[0.4em]">Asociación de Voleibol del Estado Lara</p>
     </header>
 
     <main class="flex-grow flex items-center justify-center p-6 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]">
-        <div class="bg-white w-full max-w-sm rounded-[3rem] shadow-[0_25px_60px_rgba(0,0,0,0.15)] overflow-hidden border border-gray-100 fade-in">
-            <div class="h-3 bg-[#e1ad01] w-full"></div>
-            
-            <div class="p-12 text-center">
-                <p class="text-gray-400 font-bold text-[9px] uppercase tracking-[0.4em] mb-12 italic">Sistema de Gestión - Data Ciar</p>
-                
-                <a href="index_listaciar.html" class="btn-panel group block w-full py-8 rounded-[2rem] flex flex-col items-center gap-4">
-                    <div class="bg-white/20 p-3 rounded-2xl group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#e1ad01]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
-                    <span class="text-white font-black uppercase tracking-[0.2em] text-lg italic">Atletas CIAR</span>
-                </a>
-
-                <div class="mt-12 pt-6 border-t border-gray-50 opacity-40">
-                    <p class="text-[8px] text-gray-400 font-bold uppercase tracking-widest italic text-center">Software v2.6 - Sistematikos</p>
-                </div>
-            </div>
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 p-10 text-center">
+            <p class="text-gray-400 font-bold text-[8px] uppercase tracking-[0.3em] mb-8 italic">Data Ciar - Gestión</p>
+            <a href="index_listaciar.html" class="btn-panel block w-full py-6 rounded-2xl flex flex-col items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#e1ad01]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                <span class="text-white font-black uppercase tracking-[0.2em] text-sm italic">Atletas CIAR</span>
+            </a>
         </div>
     </main>
 
-    <footer class="bg-white py-6 border-t border-gray-100 text-center flex-shrink-0">
-        <p class="text-gray-500 text-[11px] font-bold uppercase tracking-[0.2em]">
-            Desarrollado por <span class="text-[#007bff]">Sistematikos</span> - Frank Hernandez
-        </p>
+    <div id="pwa-toast" class="flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+            <div class="bg-[#007bff] p-3 rounded-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#e1ad01]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+            </div>
+            <div>
+                <h4 class="font-black text-xs uppercase text-gray-800">Instalar Aplicación</h4>
+                <p class="text-[10px] text-gray-500 font-bold uppercase">Optimizado por Sistematikos</p>
+            </div>
+        </div>
+        <p class="text-[9px] text-gray-600 font-bold leading-tight uppercase italic">¿Deseas añadir Data Ciar a tu pantalla de inicio para un acceso rápido?</p>
+        <div class="flex gap-2">
+            <button onclick="hideToast()" class="flex-1 py-2 text-[10px] font-black uppercase text-gray-400 border border-gray-100 rounded-lg">Cerrar</button>
+            <button onclick="installApp()" class="flex-1 py-2 text-[10px] font-black uppercase bg-[#007bff] text-white rounded-lg shadow-lg">Instalar Ahora</button>
+        </div>
+    </div>
+
+    <footer class="bg-white py-5 border-t border-gray-100 text-center flex-shrink-0">
+        <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em]">Desarrollado por <span class="text-[#007bff]">Sistematikos</span> - Frank Hernandez</p>
     </footer>
 
     <script>
-        // 1. Bloqueo de Clic Derecho e Inspección (F12, Ctrl+U)
         document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-                return false;
-            }
-        };
 
-        // 2. Registro de Service Worker para PWA
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log("SW error", err));
+            navigator.serviceWorker.register('sw.js');
         }
 
-        // 3. Prompt de Instalación Inteligente
         let deferredPrompt;
+        const toast = document.getElementById('pwa-toast');
+
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Evita que el navegador lance el aviso por defecto inmediatamente
             e.preventDefault();
             deferredPrompt = e;
-            
-            // Lanza el aviso personalizado tras 3 segundos
+            // Mostrar cartel después de 4 segundos
             setTimeout(() => {
-                if (confirm("✨ OPTIMIZACIÓN SISTEMATIKOS:\n\n¿Deseas instalar 'Atletas CIAR' como una aplicación en tu pantalla de inicio para acceso rápido?")) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choice) => {
-                        if (choice.outcome === 'accepted') {
-                            console.log('El usuario instaló la App');
-                        }
-                        deferredPrompt = null;
-                    });
-                }
-            }, 3000);
+                toast.classList.add('show');
+            }, 4000);
         });
 
-        // Detectar si ya se instaló satisfactoriamente
+        function hideToast() {
+            toast.classList.remove('show');
+        }
+
+        async function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('Usuario aceptó');
+                }
+                deferredPrompt = null;
+                hideToast();
+            }
+        }
+
         window.addEventListener('appinstalled', () => {
-            alert("✅ ¡Instalación Exitosa! Ya puedes usar Data Ciar desde tu menú de inicio.");
+            hideToast();
+            alert("✅ ¡INSTALACIÓN COMPLETADA!");
         });
     </script>
 </body>
