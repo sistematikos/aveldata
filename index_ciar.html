@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVEL | Registro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .bg-azul-app { background-color: #007bff; }
+        .text-azul-app { color: #007bff; }
+        .btn-registrar { background-color: #007bff !important; color: white !important; border-bottom: 4px solid #0056b3; }
+    </style>
+</head>
+<body oncontextmenu="return false" class="bg-gray-50 min-h-screen flex flex-col">
+    <header class="bg-azul-app py-8 shadow-lg border-b-4 border-[#e1ad01]">
+        <h1 class="text-white text-3xl font-black uppercase text-center tracking-tighter" id="fTi">Formulario de <span class="text-[#e1ad01]">Ingreso</span></h1>
+    </header>
+    <div class="container mx-auto p-4 md:p-8 flex-grow">
+        <div class="mb-6">
+            <a href="index_listaciar.html" class="text-azul-app font-black flex items-center gap-2 hover:underline uppercase text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Volver a la Lista
+            </a>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-2xl border-t-8 border-azul-app max-w-4xl mx-auto">
+            <form id="aFo">
+                <input type="hidden" id="aId" value="">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nombre</label><input type="text" id="nom" required class="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-azul-app uppercase font-bold outline-none"></div>
+                    <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Cédula</label><input type="number" id="ced" required class="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-azul-app font-bold outline-none"></div>
+                    <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Club</label><input type="text" id="clu" required class="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-azul-app uppercase font-bold outline-none"></div>
+                    <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Estatus</label>
+                        <select id="est" class="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-azul-app font-bold uppercase outline-none">
+                            <option value="ACTIVO">ACTIVO</option><option value="INACTIVO">INACTIVO</option><option value="RETIRADO">RETIRADO</option>
+                        </select>
+                    </div>
+                    <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Nacimiento</label><input type="date" id="fNa" onchange="window.calcularCategoria(this.value)" required class="w-full border-2 border-gray-100 rounded-lg p-3 focus:border-azul-app font-bold outline-none"></div>
+                    <div><label class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Categoría</label><input type="text" id="cat" readonly class="w-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg p-3 font-black text-azul-app italic"></div>
+                </div>
+                <button type="submit" id="btnGuardar" class="w-full mt-10 py-5 btn-registrar rounded-2xl shadow-xl text-lg font-black tracking-widest uppercase transition-all">GUARDAR REGISTRO</button>
+            </form>
+        </div>
+    </div>
+    <footer class="bg-white py-6 text-center border-t border-gray-100">
+        <p class="text-gray-500 text-[11px] font-bold uppercase tracking-[0.2em]">Desarrollado por <span class="text-azul-app">Sistematikos</span> - Frank Hernandez</p>
+    </footer>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="js/ciar_app.js"></script>
+</body>
+</html>

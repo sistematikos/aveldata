@@ -1,0 +1,58 @@
+:root {
+    --verde-ciar: #1b5e20;
+    --mostaza-ciar: #e1ad01;
+    --gris-fondo: #f4f4f4;
+    --blanco: #ffffff;
+    --texto-oscuro: #333333;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gris-fondo);
+    color: var(--texto-oscuro);
+    margin: 0;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.header-ciar {
+    background: linear-gradient(135deg, var(--verde-ciar) 0%, #0d2e10 100%);
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 4px solid var(--mostaza-ciar);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.shadow-ciar {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-ciar {
+    background-color: var(--mostaza-ciar);
+    color: white;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.btn-ciar:hover {
+    background-color: #c49600;
+    transform: translateY(-1px);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--mostaza-ciar) !important;
+    box-shadow: 0 0 0 3px rgba(225, 173, 1, 0.2);
+}
+
+/* Estilo para campos automáticos */
+.readonly-field {
+    background-color: #eeeeee;
+    color: var(--verde-ciar);
+    font-weight: 800;
+    cursor: not-allowed;
+}
