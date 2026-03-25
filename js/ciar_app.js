@@ -1,131 +1,167 @@
-(function(){
-    const _w = window;
-    const _d = document;
+/* SISTEMATIKOS - FRANK HERNANDEZ 
+   PROYECTO: DATA CIAR 2026 
+   CONTROL DE VOLEY PROFESIONAL - COLUMNA CATEGORÍA ACTIVADA
+*/
 
-    // --- REEMPLAZA ESTO CON TUS CREDENCIALES EXACTAS ---
-    const firebaseConfig = {
-        apiKey: "TU_API_KEY",
-        authDomain: "tu-proyecto.firebaseapp.com",
-        projectId: "tu-proyecto",
-        storageBucket: "tu-proyecto.appspot.com",
-        messagingSenderId: "0000000000",
-        appId: "1:0000000000:web:000000"
-    };
+// 1. CONFIGURACIÓN DE FIREBASE (Tus credenciales originales)
+const firebaseConfig = {
+    apiKey: "AIzaSyCKJsap2fngZqlbtzP1twrz-1qzF-6Mpjk",
+    authDomain: "dataciar.firebaseapp.com",
+    projectId: "dataciar",
+    storageBucket: "dataciar.firebasestorage.app",
+    messagingSenderId: "304365115097",
+    appId: "1:304365115097:web:3339775f70ccf02e8a50c8"
+};
 
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) { 
+    firebase.initializeApp(firebaseConfig); 
+}
+const db = firebase.firestore();
+const d = document;
+
+// 2. CÁLCULO AUTOMÁTICO DE CATEGORÍAS (index_ciar.html)
+window.calcularCategoria = (fechaVal) => {
+    if (!fechaVal) return;
+    const anio = new Date(fechaVal).getUTCFullYear();
+    const inputCat = d.getElementById('cat');
+    if(!inputCat) return;
+
+    let cat = "MAYOR / MASTER";
+    if (anio >= 2017 && anio <= 2018) cat = "U9";
+    else if (anio >= 2015 && anio <= 2016) cat = "U11";
+    else if (anio >= 2013 && anio <= 2014) cat = "U13";
+    else if (anio >= 2011 && anio <= 2012) cat = "U15";
+    else if (anio >= 2009 && anio <= 2010) cat = "U17";
+    
+    inputCat.value = cat;
+};
+
+// 3. REGISTRO Y ACTUALIZACIÓN (index_ciar.html)
+const f = d.getElementById('aFo');
+if (f) {
+    const edicion = JSON.parse(localStorage.getItem('edit_ciar'));
+    if (edicion) {
+        d.getElementById('aId').value = edicion.id;
+        d.getElementById('nom').value = edicion.nombre;
+        d.getElementById('ced').value = edicion.cedula;
+        d.getElementById('clu').value = edicion.club;
+        d.getElementById('est').value = edicion.estatus;
+        d.getElementById('fNa').value = edicion.fechaNacimiento;
+        d.getElementById('cat').value = edicion.categoria || "";
+        d.getElementById('btnGuardar').textContent = "ACTUALIZAR REGISTRO";
+        localStorage.removeItem('edit_ciar');
     }
-    const db = firebase.firestore();
 
-    // --- RENDERIZADO DE TABLA (index_listaciar.html e index_mdfciar.html) ---
-    const tB = _d.getElementById('aTB'); // Tabla Pública
-    const tA = _d.getElementById('aTB_Admin'); // Tabla Admin
+    f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = d.getElementById('aId').value;
+        const datos = {
+            nombre: d.getElementById('nom').value.trim().toUpperCase(),
+            cedula: d.getElementById('ced').value,
+            club: d.getElementById('clu').value.trim().toUpperCase(),
+            estatus: d.getElementById('est').value,
+            fechaNacimiento: d.getElementById('fNa').value,
+            categoria: d.getElementById('cat').value,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
 
-    if (tB || tA) {
-        db.collection("atletas").orderBy("nombre", "asc").onSnapshot((sn) => {
-            if (tB) tB.innerHTML = "";
-            if (tA) tA.innerHTML = "";
-            let c = 0;
+        try {
+            if (id) {
+                await db.collection("registros").doc(id).update(datos);
+                alert("✅ ATLETA ACTUALIZADO");
+            } else {
+                await db.collection("registros").add({
+                    ...datos, 
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("✅ REGISTRO CREADO");
+            }
+            window.location.href = "index_mdfciar.html";
+        } catch (err) { alert("Error: " + err.message); }
+    });
+}
 
-            sn.forEach((doc) => {
-                const d = doc.data();
-                const id = doc.id;
-                const cat = d.categoria || "S/C";
-                const estClass = d.estatus === 'ACTIVO' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
-
-                // Si estamos en la LISTA PÚBLICA
-                if (tB) {
-                    const r = _d.createElement('tr');
-                    r.innerHTML = `
-                        <td class="px-4 py-3 border-b border-gray-50">
-                            <div class="font-black text-gray-800 uppercase">${d.nombre}</div>
-                            <div class="text-[9px] text-gray-400 font-bold">C.I: ${d.cedula}</div>
-                        </td>
-                        <td class="px-4 py-3 border-b border-gray-50 text-center font-black text-blue-600">${cat}</td>
-                        <td class="px-4 py-3 border-b border-gray-50 font-bold text-gray-600 uppercase text-[10px]">${d.club}</td>
-                        <td class="px-4 py-3 border-b border-gray-50 text-center">
-                            <span class="px-2 py-1 rounded-full text-[8px] font-black ${estClass}">${d.estatus}</span>
-                        </td>`;
-                    tB.appendChild(r);
-                }
-
-                // Si estamos en el PANEL ADMIN
-                if (tA) {
-                    const r = _d.createElement('tr');
-                    r.innerHTML = `
-                        <td class="px-4 py-3 border-b border-gray-50 uppercase font-bold">${d.nombre}<br><span class="text-[9px] text-gray-400">${d.cedula}</span></td>
-                        <td class="px-4 py-3 border-b border-gray-50 text-center"><span class="px-2 py-1 rounded-full text-[8px] font-black ${estClass}">${d.estatus}</span></td>
-                        <td class="px-4 py-3 border-b border-gray-50 text-center">
-                            <button onclick="window.e_A('${id}')" class="text-blue-600 font-black mr-2">EDITAR</button>
-                            <button onclick="window.b_A('${id}')" class="text-red-600 font-black">BORRAR</button>
-                        </td>`;
-                    tA.appendChild(r);
-                }
-                c++;
-            });
-            const cnt = _d.getElementById('contador');
-            if(cnt) cnt.innerText = `TOTAL: ${c} ATLETAS`;
+// 4. LÓGICA DE TABLA PÚBLICA (index_listaciar.html) - CON COLUMNA CATEGORÍA
+const tPub = d.getElementById('aTB');
+if (tPub) {
+    db.collection("registros").orderBy("nombre", "asc").onSnapshot((snap) => {
+        tPub.innerHTML = "";
+        snap.forEach(doc => {
+            const r = doc.data();
+            const estCol = r.estatus === 'ACTIVO' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+            
+            tPub.insertAdjacentHTML('beforeend', `
+                <tr class="border-b border-gray-50 hover:bg-gray-50 transition text-[11px]">
+                    <td class="px-4 py-3 uppercase">
+                        <div class="font-black text-blue-600 leading-tight">${r.nombre}</div>
+                        <div class="text-[9px] text-gray-400 font-bold">C.I: ${r.cedula || 'S/N'}</div>
+                    </td>
+                    <td class="px-4 py-3 text-center font-black text-gray-700">${r.categoria || 'S/C'}</td>
+                    <td class="px-4 py-3 text-gray-500 uppercase font-bold text-[9px]">${r.club}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="${estCol} px-2 py-0.5 rounded-full text-[8px] font-black uppercase">${r.estatus}</span>
+                    </td>
+                </tr>
+            `);
         });
-    }
+        const cont = d.getElementById('contador');
+        if(cont) cont.textContent = snap.size + " ATLETAS REGISTRADOS";
+    });
+}
 
-    // --- GUARDAR ATLETA ---
-    const f = _d.getElementById('aFo');
-    if (f) {
-        f.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = _d.getElementById('aId').value;
-            const btn = _d.getElementById('btnGuardar');
-            btn.disabled = true;
-
-            const data = {
-                nombre: _d.getElementById('nom').value.toUpperCase(),
-                cedula: _d.getElementById('ced').value, // Verifica que el ID sea 'ced' sin el punto
-                estatus: _d.getElementById('est').value,
-                club: _d.getElementById('clu').value.toUpperCase(),
-                fechaNac: _d.getElementById('fNa').value,
-                categoria: _d.getElementById('cat').value
-            };
-
-            try {
-                if (id) { await db.collection("atletas").doc(id).update(data); }
-                else { await db.collection("atletas").add(data); }
-                _w.location.href = "index_mdfciar.html";
-            } catch (err) { alert("Error"); btn.disabled = false; }
+// 5. LÓGICA DE TABLA ADMINISTRATIVA (index_mdfciar.html)
+const tAdm = d.getElementById('aTB_Admin');
+if (tAdm) {
+    db.collection("registros").orderBy("nombre", "asc").onSnapshot((snap) => {
+        tAdm.innerHTML = "";
+        snap.forEach(doc => {
+            const r = doc.data();
+            const estCol = r.estatus === 'ACTIVO' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+            
+            tAdm.insertAdjacentHTML('beforeend', `
+                <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                    <td class="px-4 py-3 uppercase">
+                        <div class="font-black text-gray-800 text-xs leading-tight">${r.nombre}</div>
+                        <div class="text-[9px] text-blue-500 font-bold">C.I: ${r.cedula || 'S/N'} | ${r.categoria || 'S/C'}</div>
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="${estCol} px-2 py-0.5 rounded-full text-[8px] font-black uppercase">${r.estatus}</span>
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                        <div class="flex justify-center gap-1">
+                            <button onclick='window.editar("${doc.id}", ${JSON.stringify(r).replace(/'/g, "&apos;")})' class="bg-blue-600 text-white px-2 py-1 rounded-lg text-[8px] font-black">MOD</button>
+                            <button onclick="window.eliminar('${doc.id}')" class="bg-red-600 text-white px-2 py-1 rounded-lg text-[8px] font-black">DEL</button>
+                        </div>
+                    </td>
+                </tr>
+            `);
         });
+    });
+}
+
+// 6. FUNCIONES GLOBALES
+window.editar = (id, data) => {
+    localStorage.setItem('edit_ciar', JSON.stringify({id, ...data}));
+    window.location.href = "index_ciar.html";
+};
+
+window.eliminar = async (id) => {
+    if(confirm("⚠️ ¿ELIMINAR ESTE ATLETA?")) {
+        try { await db.collection("registros").doc(id).delete(); } catch (err) { alert("Error"); }
     }
+};
 
-    // --- FUNCIONES GLOBALES ---
-    _w.filtrar = () => {
-        const b = _d.getElementById('busNom').value.toUpperCase();
-        _d.querySelectorAll('tbody tr').forEach(r => r.style.display = r.innerText.toUpperCase().includes(b) ? '' : 'none');
-    };
+window.filtrar = () => {
+    const val = d.getElementById('busNom').value.toUpperCase();
+    d.querySelectorAll('tbody tr').forEach(tr => {
+        tr.style.display = tr.innerText.toUpperCase().includes(val) ? "" : "none";
+    });
+};
 
-    _w.e_A = async (id) => {
-        const doc = await db.collection("atletas").doc(id).get();
-        const d = doc.data();
-        sessionStorage.setItem('edit_id', id);
-        sessionStorage.setItem('edit_data', JSON.stringify(d));
-        _w.location.href = "index_ciar.html";
-    };
-
-    // Al cargar el formulario de edición
-    if (_d.getElementById('aFo') && sessionStorage.getItem('edit_id')) {
-        const id = sessionStorage.getItem('edit_id');
-        const d = JSON.parse(sessionStorage.getItem('edit_data'));
-        _d.getElementById('aId').value = id;
-        _d.getElementById('nom').value = d.nombre;
-        _d.getElementById('ced').value = d.cedula;
-        _d.getElementById('est').value = d.estatus;
-        _d.getElementById('clu').value = d.club;
-        _d.getElementById('fNa').value = d.fechaNac;
-        _d.getElementById('cat').value = d.categoria || "";
-        sessionStorage.removeItem('edit_id');
-        sessionStorage.removeItem('edit_data');
+// 7. PROTECCIÓN SISTEMATIKOS (F12 Bloqueado)
+d.addEventListener('contextmenu', e => e.preventDefault());
+d.onkeydown = function(e) {
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+        return false;
     }
-
-    // PROTECCIÓN
-    _d.addEventListener('contextmenu', e => e.preventDefault());
-    _d.onkeydown = (e) => {
-        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false;
-    };
-})();
+};
